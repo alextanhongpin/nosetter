@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"go/ast"
 	"go/types"
-	"strings"
+	"path"
 
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
@@ -19,7 +19,7 @@ var Analyzer = &analysis.Analyzer{
 }
 
 func init() {
-	Analyzer.Flags.String("pkg", "", "will ensure pkg path with this prefix will err")
+	Analyzer.Flags.String("pkg", "github.com/alextanhongpin", "will ensure pkg path with this prefix will err")
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
@@ -61,7 +61,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 				structName := nTyp.Obj().Name()    // Foo
 				pkgPath := nTyp.Obj().Pkg().Path() // github.com/alextanhongpin/nosetter/foo
 
-				if strings.HasPrefix(pkgPath, pkg) {
+				ok, err := path.Match(pkg, fmt.Sprintf("%s.%s", pkgPath, structName))
+				if err != nil {
+					panic(err)
+				}
+				if ok {
 					err := fmt.Errorf("%s.%s", pkgPath, structName)
 					pass.Reportf(call.TokPos, "Setter not allowed for struct: %v", err)
 				}

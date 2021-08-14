@@ -2,9 +2,9 @@
 
 
 ```
-$ cd cmd
+$ cd cmd/nosetter
 $ go install
-$ go vet -vettool=$(which cmd)
+$ go vet -vettool=$(which nosetter)
 ```
 
 
