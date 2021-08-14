@@ -1,0 +1,20 @@
+# You can enable custom linter for golangci-lint.
+# https://github.com/golangci/example-plugin-linter
+# go version must match to build the plugin for golangci-lint
+# pkg version must match: require golang.org/x/tools v0.1.3
+#
+# Version used can be found at the release branch
+# go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.41.1
+# However, there are now ways to pass custom flags to the custom golang ci lint.
+linters-settings:
+ custom:
+  nosetter:
+   path: main.so
+   description: The description of the linter
+   original-url: github.com/alextanhongpin/nosetter/cmd/golint
+
+run:
+  skip-dirs:
+    - internal/cache
+    - internal/renameio
+    - internal/robustio
